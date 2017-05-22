@@ -51,7 +51,8 @@ class Registration: UIViewController, UITextViewDelegate, UIImagePickerControlle
         
         registration_clubDescription.resignFirstResponder()
 
-        let viewOrigin = CGPoint(x:(registration_clubDescription.frame.origin.x), y:(registration_tags.frame.origin.y * 9/19))
+        let viewOrigin = CGPoint(x:(self.view.frame.width/2 ), y:(registration_clubDescription.frame.origin.y + registration_clubDescription.frame.origin.y * 100/970))
+
         
         registration_clubDescription.text = "This is an app to help clubs find another club to collaborate events with."
         registration_clubDescription.textColor = color
@@ -77,9 +78,9 @@ class Registration: UIViewController, UITextViewDelegate, UIImagePickerControlle
         NSLayoutConstraint.activate([
             
             
-            NSLayoutConstraint(item: cloudView, attribute: .top, relatedBy: .equal, toItem: registration_scrollView, attribute: .top, multiplier: 1.0, constant: (registration_tags.frame.origin.y + (registration_tags.frame.origin.y * 9/19))),
+            NSLayoutConstraint(item: cloudView, attribute: .top, relatedBy: .equal, toItem: registration_scrollView, attribute: .top, multiplier: 1.0, constant: (registration_tags.frame.origin.y + registration_tags.frame.origin.y * 25/500)),
             
-            NSLayoutConstraint(item: cloudView, attribute: .left, relatedBy: .equal, toItem: registration_scrollView, attribute: .left, multiplier: 1.0, constant: registration_tags.frame.origin.x),
+            NSLayoutConstraint(item: cloudView, attribute: .left, relatedBy: .equal, toItem: registration_scrollView, attribute: .left, multiplier: 1.0, constant: self.view.frame.width/2 - (231/2)),
             
             cloudView.heightAnchor.constraint(equalToConstant: 150),
             cloudView.widthAnchor.constraint(equalToConstant: 231)])
