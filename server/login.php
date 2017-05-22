@@ -51,8 +51,8 @@ while ($stmt->fetch())
     // The user is verified, quickly update their row to trigger the timestamp change
     $stmt->close();
     
-    $stmt = $conn->prepare("UPDATE ubcollaborate_users SET user_email=? WHERE user_email=? LIMIT 1");
-    $stmt->bind_param('ss', $email, $email);
+    $stmt = $conn->prepare("UPDATE ubcollaborate_users SET user_lastlogin=now() WHERE user_email=? LIMIT 1");
+    $stmt->bind_param('s', $email);
     $stmt->execute();
     $stmt->close();
     
