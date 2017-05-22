@@ -26,9 +26,9 @@ function generateGUID() {
 /** HANDLE FORGOTTEN PASSWORD  **/
 
 // Get all the data first
-$email           = $_GET['email'];
-$password        = $_GET['password'];
-$password_verify = $_GET['password_verify'];
+$email           = $_POST['email'] != "" ? $_POST['email'] : $_GET['email'];
+$password        = $_POST['password'] != "" ? $_POST['password'] : $_GET['password'];
+$password_verify = $_POST['password_verify'] != "" ? $_POST['password_verify'] : $_GET['password_verify'];
 $user_guid       = generateGUID();
 
 // Validate the email format
