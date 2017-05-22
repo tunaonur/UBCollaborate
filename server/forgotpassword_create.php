@@ -81,15 +81,18 @@ $stmt->execute();
 $stmt->close();
 
 // Now send an email to the user
-$subject = 'Password Reset Request from UBCollaborate';
-$message = 'Password Reset Request from UBCollaborate' . '\n\n';
-$message .= 'Please follow this link to reset your password:' . '\n';
-$message .= 'https://www.ryanwirth.ca/misc/ubcollaborate/forgotpassword_verify.php?id=' . $user_id . "&guid=" . $user_guid;
-$headers = 'From: noreply@ryanwirth.ca' . "\r\n" .
-           'Reply-To: noreply@ryanwirth.ca' . "\r\n" .
-           'X-Mailer: PHP/' . phpversion();
+$subject = 'Password Reset - UBCollaborate';
+$message = "
+<html lang=\"en\"><head> <title>Password Reset - UBCollaborate</title> <style>@import url('https://fonts.googleapis.com/css?family=Roboto,300|700'); body{font-family:'Roboto', sans-serif; margin:0px; padding:0px; background-color:#E9E9E9;}a{text-decoration: none; color:#00A8C6;}div.header{width:100%; height:64px; line-height:66px; background-color:#00A8C6; color:#FFF; border-bottom:2px solid #0097B2;}div.header p{font-size:18px; font-weight: 700; margin-left:16px; text-shadow: 0px 1px 1px #0097B2;}div.content{font-size:14px; font-weight:300; padding:18px; color:#363636;}</style></head><body><div class=\"header\"> <p>Password Reset - UBCollaborate</p></div><div class=\"content\"> <p>This is a notification that someone attempted to reset your password on UBCollaborate. If that someone wasn't you, please send us an email immediately.</p><p><strong>If that someone was you</strong>, please click <a href=\"https://www.ryanwirth.ca/misc/ubcollaborate/forgotpassword_verify.php?id=".$user_id."&guid=".$user_guid."\">here</a> to confirm your new password.</p><br/> <p>Regards,</p><p>&mdash; UBCollaborate</p></div></body>
+";
 
-mail($email, $subject, $message, $headers);
+// To send HTML mail, the Content-type header must be set
+$headers[] = 'MIME-Version: 1.0';
+$headers[] = 'Content-type: text/html; charset=iso-8859-1';
+
+$headers[] = 'From: UBCollaborate <noreply@ryanwirth.ca>';
+
+mail($email, $subject, $message, implode("\r\n", $headers));
 
 outputResponse(array("status" => "success"));
 
