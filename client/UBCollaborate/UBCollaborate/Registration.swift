@@ -188,6 +188,7 @@ class Registration: UIViewController, UITextViewDelegate, UIImagePickerControlle
                 
                 print("statusCode should be 200, but is \(httpStatus.statusCode)")
                 print("response = \(response)")
+                return
             }
             
             
@@ -314,6 +315,7 @@ class Registration: UIViewController, UITextViewDelegate, UIImagePickerControlle
                 
                 print("statusCode should be 200, but is \(httpStatus.statusCode)")
                 print("response = \(response)")
+                return
             }
             
             

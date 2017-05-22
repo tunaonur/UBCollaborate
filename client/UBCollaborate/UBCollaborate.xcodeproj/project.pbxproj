@@ -16,6 +16,7 @@
 		E372ACBD1EC91A390085DAC9 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E372ACBB1EC91A390085DAC9 /* LaunchScreen.storyboard */; };
 		E372ACC51EC92AE50085DAC9 /* Login.swift in Sources */ = {isa = PBXBuildFile; fileRef = E372ACC41EC92AE50085DAC9 /* Login.swift */; };
 		E372ACC71EC938740085DAC9 /* Registration.swift in Sources */ = {isa = PBXBuildFile; fileRef = E372ACC61EC938740085DAC9 /* Registration.swift */; };
+		E3D962DD1ED2BE0500AB38D2 /* ForgotPassword.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3D962DC1ED2BE0500AB38D2 /* ForgotPassword.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +33,7 @@
 		E372ACBE1EC91A390085DAC9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E372ACC41EC92AE50085DAC9 /* Login.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Login.swift; sourceTree = "<group>"; };
 		E372ACC61EC938740085DAC9 /* Registration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Registration.swift; sourceTree = "<group>"; };
+		E3D962DC1ED2BE0500AB38D2 /* ForgotPassword.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ForgotPassword.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -85,6 +87,7 @@
 				E372ACBB1EC91A390085DAC9 /* LaunchScreen.storyboard */,
 				E372ACBE1EC91A390085DAC9 /* Info.plist */,
 				E372ACB61EC91A390085DAC9 /* UBCollaborate.xcdatamodeld */,
+				E3D962DC1ED2BE0500AB38D2 /* ForgotPassword.swift */,
 			);
 			path = UBCollaborate;
 			sourceTree = "<group>";
@@ -225,6 +228,7 @@
 				E372ACB01EC91A390085DAC9 /* AppDelegate.swift in Sources */,
 				E372ACC71EC938740085DAC9 /* Registration.swift in Sources */,
 				E372ACC51EC92AE50085DAC9 /* Login.swift in Sources */,
+				E3D962DD1ED2BE0500AB38D2 /* ForgotPassword.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
