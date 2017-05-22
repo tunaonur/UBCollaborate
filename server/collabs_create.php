@@ -14,31 +14,30 @@ function outputResponse($data) {
 /** HANDLE CREATING A COLLAB **/
 
 // Get all of the data
-$
+$email       = $_POST['email'] != "" ? $_POST['email'] : $_GET['email'];
+$guid        = $_POST['guid'] != "" ? $_POST['guid'] : $_GET['guid'];
+$title       = $_POST['title'] != "" ? $_POST['title'] : $_GET['title'];
+$description = $_POST['description'] != "" ? $_POST['description'] : $_GET['description'];
+$tags        = $_POST['tags'] != "" ? $_POST['tags'] : $_GET['tags'];
 
 // Connect to the MySQL database
 include("configuration.php");
 
-// Prepare the selection query for getting all of the open collaborations
-$stmt = $conn->prepare("SELECT collab_userid, collab_title, collab_description, collab_tags, collab_timestamp FROM ubcollaborate_collabs ORDER BY " . $sortColumn . " DESC");
+// Attempt to get the user ID (verify the user)
+$stmt = $conn->prepare("SELECT user_id FROM ubcollaborate_users WHERE user_email=? AND user_guid=? LIMIT 1");
+$stmt->bind_params("ss", $email, $guid);
 $stmt->execute();
-$stmt->bind_result($collab_userid, $collab_title, $collab_description, $collab_tags, $collab_timestamp);
+$stmt->bind_result($user_id);
 
-// For every collaboration that was retrieved, add it to the results array
-$results = array();
-while($stmt->fetch())
-{
-    $row = array("collab_userid"      => $collab_userid,
-                 "collab_title"       => $collab_title,
-                 "collab_description" => $collab_description,
-                 "collab_tags"        => $collab_tags,
-                 "collab_timestamp"   => $collab_timestamp);
-    array_push($results, $row);
-}
+if($stmt->fetch() == false) outputResponse(array("status" => "error", "type" => "verification_failed"));
 $stmt->close();
 
-// Output the results as json
-outputResponse(array("status"  => "success",
-                     "results" => $results));
+// The user was verified, insert a new row in the collabs table
+$stmt = $conn->prepare("INSERT into ubcollaborate_collabs (collab_userid, collab_title, collab_description, collab_tags) VALUES(?, ?, ?, ?)");
+$stmt->bind_params("isss", $user_id, $title, $description, $tags);
+$stmt->execute();
+$stmt->close();
+
+outputResponse(array("status" => "success"));
 
 ?>
