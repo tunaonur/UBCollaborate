@@ -4,17 +4,18 @@
 $success = false;
 
 // Get all the data first
-$user_id = $_GET['id'];
 $user_guid = $_GET['guid'];
+$fpr_guid  = $_GET['fpr'];
 
 // Connect to MySQL
 include("configuration.php");
 
 // Check if this row exists in the forgottenpasswords table
-$stmt = $conn->prepare("SELECT fpr_newpassword FROM ubcollaborate_forgottenpasswords WHERE fpr_userid=? AND fpr_guid=? LIMIT 1");
-$stmt->bind_param('ss', $user_id, $user_guid);
+$stmt = $conn->prepare("SELECT fpr_newpassword, fpr_userid FROM ubcollaborate_forgottenpasswords WHERE fpr_guid=? LIMIT 1");
+$stmt->bind_param('s', $fpr_guid);
 $stmt->execute();
-$stmt->bind_result($user_newpassword);
+$stmt->bind_result($user_newpassword, $user_id);
+
 
 if($stmt->fetch() == false) {
     $success = false;
@@ -22,19 +23,30 @@ if($stmt->fetch() == false) {
 } else {
     $stmt->close();
     
-    // We got the new password, now copy it over
-    $stmt = $conn->prepare("UPDATE ubcollaborate_users SET user_password=? WHERE user_id=?");
-    $stmt->bind_param('si', $user_newpassword, $user_id);
+    $stmt = $conn->prepare("SELECT user_id FROM ubcollaborate_users WHERE user_id=? AND user_guid=?");
+    $stmt->bind_param("ss", $user_id, $user_guid);
     $stmt->execute();
-    $stmt->close();
+    
+    if($stmt->fetch() == false) {
+        $success = false;
+        $stmt->close();
+    } else {
+        $stmt->close();
+        
+        // Update the password
+        $stmt = $conn->prepare("UPDATE ubcollaborate_users SET user_password=? WHERE user_id=? AND user_guid=?");
+        $stmt->bind_param("sis", $user_newpassword, $user_id, $user_guid);
+        $stmt->execute();
+        $stmt->close();
+        
+        // Now delete the fpr row
+        $stmt = $conn->prepare("DELETE FROM ubcollaborate_forgottenpasswords WHERE fpr_userid=? LIMIT 1");
+        $stmt->bind_param('i', $user_id);
+        $stmt->execute();
+        $stmt->close();
 
-    // Now delete the fpr row
-    $stmt = $conn->prepare("DELETE FROM ubcollaborate_forgottenpasswords WHERE fpr_userid=? LIMIT 1");
-    $stmt->bind_param('i', $user_id);
-    $stmt->execute();
-    $stmt->close();
-
-    $success = true;
+        $success = true;
+    }
 }
 
 ?>

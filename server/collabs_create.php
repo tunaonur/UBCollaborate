@@ -11,8 +11,10 @@ function outputResponse($data) {
     exit;
 }
 
-/** HANDLE GETTING COLLABS **/
-$sortColumn = "collab_timestamp";
+/** HANDLE CREATING A COLLAB **/
+
+// Get all of the data
+$
 
 // Connect to the MySQL database
 include("configuration.php");
