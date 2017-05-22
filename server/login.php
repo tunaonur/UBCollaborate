@@ -48,6 +48,14 @@ while ($stmt->fetch())
     $user_verified = $user_verified == '1' ? true : false;
     if(!$user_verified) outputResponse(array("status" => "error", "type" => "user_not_verified"));
     
+    // The user is verified, quickly update their row to trigger the timestamp change
+    $stmt->close();
+    
+    $stmt = $conn->prepare("UPDATE ubcollaborate_users SET user_email=? WHERE user_email=? LIMIT 1");
+    $stmt->bind_param('ss', $email, $email);
+    $stmt->execute();
+    $stmt->close();
+    
     // The user is verified, output their data
     outputResponse(array("status" => "success",
                          "user_email" => $user_email,
