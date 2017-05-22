@@ -36,11 +36,11 @@ include("configuration.php");
 $password_hashed =  crypt($password, $salt);
 
 // Submit the query
-$stmt = $conn->prepare("SELECT user_verified, user_email, user_displayname, user_description, user_logohash, user_url, user_tags FROM ubcollaborate_users WHERE user_email=? AND user_password=? LIMIT 1");
+$stmt = $conn->prepare("SELECT user_verified, user_email, user_displayname, user_description, user_logohash, user_url, user_tags, user_guid FROM ubcollaborate_users WHERE user_email=? AND user_password=? LIMIT 1");
 
 $stmt->bind_param('ss', $email, $password_hashed);
 $stmt->execute();
-$stmt->bind_result($user_verified, $user_email, $user_displayname, $user_description, $user_logohash, $user_url, $user_tags);
+$stmt->bind_result($user_verified, $user_email, $user_displayname, $user_description, $user_logohash, $user_url, $user_tags, $user_guid);
 
 while ($stmt->fetch())
 {
@@ -63,7 +63,8 @@ while ($stmt->fetch())
                          "user_description" => $user_description,
                          "user_logohash"    => $user_logohash,
                          "user_url"         => $user_url,
-                         "user_tags"        => $user_tags));
+                         "user_tags"        => $user_tags,
+                         "user_guid"        => $user_guid));
 }
 $stmt->close();
 

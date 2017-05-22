@@ -12,14 +12,18 @@ function outputResponse($data) {
 }
 
 /** HANDLE GETTING COLLABS **/
+$sortColumn = "collab_timestamp";
+
+// Connect to the MySQL database
 include("configuration.php");
 
-$stmt = $conn->prepare("SELECT collab_userid, collab_title, collab_description, collab_tags, collab_timestamp FROM ubcollaborate_collabs");
+// Prepare the selection query for getting all of the open collaborations
+$stmt = $conn->prepare("SELECT collab_userid, collab_title, collab_description, collab_tags, collab_timestamp FROM ubcollaborate_collabs ORDER BY " . $sortColumn . " DESC");
 $stmt->execute();
 $stmt->bind_result($collab_userid, $collab_title, $collab_description, $collab_tags, $collab_timestamp);
 
+// For every collaboration that was retrieved, add it to the results array
 $results = array();
-
 while($stmt->fetch())
 {
     $row = array("collab_userid"      => $collab_userid,
@@ -31,6 +35,7 @@ while($stmt->fetch())
 }
 $stmt->close();
 
+// Output the results as json
 outputResponse(array("status"  => "success",
                      "results" => $results));
 

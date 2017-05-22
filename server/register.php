@@ -11,6 +11,18 @@ function outputResponse($data) {
     exit;
 }
 
+/**
+ * Generates 32 chars of a GUID.
+ *
+ * @return String
+ */
+function generateGUID() {
+    $data = openssl_random_pseudo_bytes(16);
+    $data[6] = chr(ord($data[6]) & 0x0f | 0x40); // set version to 0100
+    $data[8] = chr(ord($data[8]) & 0x3f | 0x80); // set bits 6-7 to 10
+    return vsprintf('%s%s%s%s%s%s%s%s', str_split(bin2hex($data), 4));
+}
+
 /** HANDLE REGISTRATION **/
 
 // Get all the data first
@@ -22,6 +34,7 @@ $logohash        = $_GET['logohash'];
 $description     = $_GET['description'];
 $url             = $_GET['url'];
 $tags            = $_GET['tags'];
+$guid            = generateGUID();
 
 // Validate the email format
 $email = filter_var($email, FILTER_SANITIZE_EMAIL);
@@ -56,8 +69,8 @@ while($stmt->fetch())
 $stmt->close();
 
 // The email is not in use if we get here
-$stmt = $conn->prepare("INSERT into ubcollaborate_users (user_email, user_password, user_displayname, user_logohash, user_description, user_url, user_tags) VALUES (?, ?, ?, ?, ?, ?, ?)");
-$stmt->bind_param('sssssss', $email, $password_hashed, $displayname, $logohash, $description, $url, $tags);
+$stmt = $conn->prepare("INSERT into ubcollaborate_users (user_email, user_password, user_displayname, user_logohash, user_description, user_url, user_tags, user_guid) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+$stmt->bind_param('sssssss', $email, $password_hashed, $displayname, $logohash, $description, $url, $tags, $guid);
 $stmt->execute();
 
 if($stmt->fetch()) outputResponse(array("status" => "success"));
